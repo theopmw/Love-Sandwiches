@@ -21,9 +21,21 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 # Access the love_sanwiches spreadsheet by using the open() method on our client object and passing it the name of the spreadsheet
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
-# Define sheet variable and using the worksheet method of the sheet, call the “sales” worksheet (this corresponds to the name of the worksheet in the love_sandwiches work book)
-sales = SHEET.worksheet('sales')
+# TEST TO CHECK API IS WORKING
+# Define sheet variable and using the worksheet method of the sheet, call the “sales” worksheet (this corresponds to the name of the worksheet in the love_sandwiches spreadsheet)
+# sales = SHEET.worksheet('sales')
+# data = sales.get_all_values()
+# print(data)
 
-data = sales.get_all_values()
+def get_sales_data():
+    """
+    Get sales figures input from the user
+    """
+    print("Please enter sales data from the last market.")
+    print("Data should be 6 numbers, separated by commas.")
+    print("Example: 10,20,30,40,50,60\n")
 
-print(data)
+    data_str = input("Enter your data here: ")
+    print(f"The data provided is {data_str}")
+
+get_sales_data()
