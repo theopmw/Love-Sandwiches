@@ -75,7 +75,8 @@ def validate_data(values):
     or if there aren't exactly 6 values.
     """
     try:
-        # Use list comprehension to convert each individual value in the values list into an integer.
+        # Use list comprehension to convert each individual value in the
+        # values list into an integer.
         [int(value) for value in values]
         if len(values) != 6:
             raise ValueError(
@@ -142,17 +143,16 @@ def calculate_surplus_data(sales_row):
 def get_last_5_entries_sales():
     """
     Collects columns of data from sales worksheet, collecting
-    the last 5 entries for each sandwich and returas the data 
+    the last 5 entries for each sandwich and returns the data 
     as a list of lists.
     """
     sales = SHEET.worksheet("sales")
-
 
     columns = []
     for ind in range(1, 7):
         column = sales.col_values(ind)
         columns.append(column[-5:])
-    
+
     return columns
 
 
@@ -171,20 +171,50 @@ def calculate_stock_data(data):
 
     return new_stock_data
 
+
+# def main():
+#     """
+#     Run all program functions
+#     """
+#     data = get_sales_data()
+#     # Convert strings from data variable to integers
+#     sales_data = [int(num) for num in data]
+#     update_worksheet(sales_data, "sales")
+#     new_surplus_data = calculate_surplus_data(sales_data)
+#     update_worksheet(new_surplus_data, "surplus")
+#     sales_columns = get_last_5_entries_sales()
+#     stock_data = calculate_stock_data(sales_columns)
+#     update_worksheet(stock_data, "stock")
+
 def main():
     """
-    Run all program functions
+    Run all program functions.
     """
     data = get_sales_data()
-    # Convert strings from data variable to integers
     sales_data = [int(num) for num in data]
     update_worksheet(sales_data, "sales")
-    new_surplus_data = calculate_surplus_data(sales_data)
-    update_worksheet(new_surplus_data, "surplus")
+
+    new_surplus_row = calculate_surplus_data(sales_data)
+    update_worksheet(new_surplus_row, "surplus")
+
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, "stock")
+    return stock_data
+
 
 print("Welcome to Love Sandwiches Data Automation")
-main()
+stock_data = main()
 
+
+def get_stock_values(data):
+    """
+    Print out the calculated stock numbers for each sandwich type.
+    """
+    print("Make the following numbers of sandwiches for next trading day:\n")
+    headings = SHEET.worksheet("stock").get_all_values()[0]
+    return {heading: data for heading, data in zip(headings, data)}
+
+
+stock_values = get_stock_values(stock_data)
+print(stock_values)
